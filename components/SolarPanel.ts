@@ -7,9 +7,7 @@ import SolarThermalSystemComponent from "./SolarThermalSystemComponent";
 export default class SolarPanel extends SolarThermalSystemComponent {
   solarPanelSize: number; // m^2
   powerGen: number; // W/m^2
-  inletTemperature: number;
   inletPressure: number;
-  volume: number;
 
   constructor(
     eos: EquationOfState,
@@ -20,12 +18,10 @@ export default class SolarPanel extends SolarThermalSystemComponent {
     volume: number
   ) {
     const name = "SolarPanel";
-    super(name, eos);
+    super(name, eos, volume, inletTemperature);
     this.solarPanelSize = solarPanelSize;
     this.powerGen = powerGen;
-    this.inletTemperature = inletTemperature;
     this.inletPressure = inletPressure;
-    this.volume = volume;
   }
 
   private totalPowerGenerationCalculation() {
@@ -38,44 +34,5 @@ export default class SolarPanel extends SolarThermalSystemComponent {
     const totalHeatInput = this.totalPowerGenerationCalculation();
     const outletEnthalpy = totalHeatInput + inletEnthalpy;
     return outletEnthalpy;
-  }
-
-  public outletTemperatureCalculation() {
-    const outletEnthalpy = this.outletEnthalpyCalculation();
-    const outletTemperature = bisection(
-      this.eos.enthalpyCalculation,
-      outletEnthalpy,
-      0,
-      20000,
-      0.01,
-      1000,
-      this.volume
-    );
-    return outletTemperature;
-  }
-
-  public outletEntropyCalculation() {
-    const outletTemperature = this.outletTemperatureCalculation();
-    const outletEntropy = this.eos.entropyCalculation(
-      outletTemperature,
-      this.volume
-    );
-    return outletEntropy;
-  }
-
-  public inletEnthalpyCalculation() {
-    const inletEnthalpy = this.eos.enthalpyCalculation(
-      this.inletTemperature,
-      this.volume
-    );
-    return inletEnthalpy;
-  }
-
-  public inletEntropyCalculation() {
-    const inletEntropy = this.eos.entropyCalculation(
-      this.inletTemperature,
-      this.volume
-    );
-    return inletEntropy;
   }
 }

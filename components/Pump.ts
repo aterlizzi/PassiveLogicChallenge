@@ -13,9 +13,7 @@ import SolarThermalSystemComponent from "./SolarThermalSystemComponent";
 export default class Pump extends SolarThermalSystemComponent {
   workInput: number; // kJ/kg
   pumpEfficiency: number;
-  volume: number; // m^3/kg
   inletPressure: number; // kPa
-  inletTemperature: number; // K
 
   constructor(
     eos: EquationOfState,
@@ -26,12 +24,10 @@ export default class Pump extends SolarThermalSystemComponent {
     inletTemperature: number
   ) {
     const name = "Pump";
-    super(name, eos);
+    super(name, eos, volume, inletTemperature);
     this.workInput = workInput;
     this.pumpEfficiency = pumpEfficiency;
-    this.volume = volume;
     this.inletPressure = inletPressure;
-    this.inletTemperature = inletTemperature;
   }
 
   private idealWorkCalculation() {
@@ -51,34 +47,6 @@ export default class Pump extends SolarThermalSystemComponent {
     const inletEnthalpy = this.inletEnthalpyCalculation();
     const outletEnthalpy = this.workInput + inletEnthalpy;
     return outletEnthalpy;
-  }
-
-  public outletEntropyCalculation() {
-    const outletTemp = this.outletTemperatureCalculation();
-    const outletEntropy = this.eos.entropyCalculation(outletTemp, this.volume);
-    return outletEntropy;
-  }
-
-  public outletTemperatureCalculation() {
-    const outletEnthalpy = this.outletEnthalpyCalculation();
-    const outletTemp = bisection(
-      this.eos.enthalpyCalculation,
-      outletEnthalpy,
-      0,
-      20000,
-      0.01,
-      1000,
-      this.volume
-    );
-    return outletTemp;
-  }
-
-  public inletEnthalpyCalculation() {
-    const inletEnthalpy = this.eos.enthalpyCalculation(
-      this.inletTemperature,
-      this.volume
-    );
-    return inletEnthalpy;
   }
 
   public inletEntropyCalculation() {

@@ -1,4 +1,5 @@
 import { EquationOfState } from "../EquationOfState";
+import HeatTransferProperties from "../types/HeatTransferProperties";
 import { PipeProperties } from "../types/PipeProperties";
 import SolarThermalSystemComponent from "./SolarThermalSystemComponent";
 
@@ -7,29 +8,22 @@ export default class Pipe extends SolarThermalSystemComponent {
   pipeProps: PipeProperties;
   avgVelocity: number;
   inletPressure: number;
-  inletTemperature: number;
-  innerSurfaceTemperature: number;
-
-  // This is a property of the interaction between the fluid and the pipe material.
-  heatTransferCoefficient: number;
+  heatTransferProps: HeatTransferProperties;
 
   constructor(
     eos: EquationOfState,
     pipeProps: PipeProperties,
+    heatTransferProps: HeatTransferProperties,
     avgVelocity: number,
     inletPressure: number,
     inletTemperature: number,
-    innerSurfaceTemperature: number,
-    heatTransferCoefficient: number
+    volume: number
   ) {
     const name = "Pipe";
-    super(name, eos);
+    super(name, eos, volume, inletTemperature);
     this.pipeProps = pipeProps;
     this.avgVelocity = avgVelocity;
     this.inletPressure = inletPressure;
-    this.inletTemperature = inletTemperature;
-    this.innerSurfaceTemperature = innerSurfaceTemperature;
-    this.heatTransferCoefficient = heatTransferCoefficient;
   }
 
   // Pressure drop in a straight pipe. We are neglecting the L-shaped turns of the pipe for simplicity.
@@ -41,10 +35,11 @@ export default class Pipe extends SolarThermalSystemComponent {
   }
 
   private alphaCalculation() {
+    const { heatTransferCoefficient } = this.heatTransferProps;
     const { specificHeat: Cp, diameter: D } = this.pipeProps;
     const { density: row } = this.eos.fluidProps;
     const alpha =
-      (4 * this.heatTransferCoefficient) / (Cp * row * this.avgVelocity * D);
+      (4 * heatTransferCoefficient) / (Cp * row * this.avgVelocity * D);
     return alpha;
   }
 
@@ -56,12 +51,22 @@ export default class Pipe extends SolarThermalSystemComponent {
 
   // This is an incredibly simplified model for how temperature gradient behaves and assumes both constant density of fluid and heat capacity.
   public outletTemperatureCalculation() {
+    const { innerSurfaceTemperature } = this.heatTransferProps;
     const { length: L } = this.pipeProps;
     const alpha = this.alphaCalculation();
     const ouletTemperature =
-      this.innerSurfaceTemperature +
-      (this.inletTemperature - this.innerSurfaceTemperature) *
+      innerSurfaceTemperature +
+      (this.inletTemperature - innerSurfaceTemperature) *
         Math.exp(-1 * alpha * L);
     return ouletTemperature;
+  }
+
+  public outletEnthalpyCalculation() {
+    const outletTemperature = this.outletTemperatureCalculation();
+    const outletEnthalpy = this.eos.enthalpyCalculation(
+      outletTemperature,
+      this.volume
+    );
+    return outletEnthalpy;
   }
 }
