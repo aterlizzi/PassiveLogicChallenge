@@ -108,14 +108,13 @@ class EquationOfState {
 
 // Subclass for van der Waals Equation of State.
 export default class VanDerWaalsEOS extends EquationOfState {
-  constructor(
-    fluidProps: FluidProperties,
-    omega: number,
-    psi: number,
-    sigma: number,
-    epsilon: number,
-    alpha: number
-  ) {
+  constructor(fluidProps: FluidProperties) {
+    // van der Waals parameters, SVAS-8th Edition, Table 3.1
+    const omega = 1 / 8;
+    const psi = 27 / 64;
+    const sigma = 0;
+    const epsilon = 0;
+    const alpha = 1;
     super(fluidProps, omega, psi, sigma, epsilon, alpha);
   }
 

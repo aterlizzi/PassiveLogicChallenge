@@ -1,8 +1,7 @@
 export enum FluidType {
   CarbonDioxide,
-  Water,
-  Ethanol,
-  Ethane,
+  Hydrogen,
+  Nitrogen,
 }
 
 export interface FluidProperties {
@@ -13,7 +12,3 @@ export interface FluidProperties {
   C: number;
   D: number;
 }
-
-export const fluidProperties = {
-  [FluidType.CarbonDioxide]: {},
-};
