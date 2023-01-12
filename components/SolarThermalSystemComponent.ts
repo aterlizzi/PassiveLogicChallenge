@@ -11,13 +11,3 @@ export default class SolarThermalSystemComponent {
     this.eos = eos;
   }
 }
-
-export class StorageTank extends SolarThermalSystemComponent {
-  heatLossToSurroundings: number;
-
-  constructor(eos: EquationOfState, heatLossToSurroundings: number) {
-    const name = "StorageTank";
-    super(name, eos);
-    this.heatLossToSurroundings = heatLossToSurroundings;
-  }
-}

@@ -10,7 +10,7 @@ import SolarThermalSystemComponent from "./SolarThermalSystemComponent";
 // Calc outlet temp
 // Calc enthalpy
 // Calc entropy
-export class Pump extends SolarThermalSystemComponent {
+export default class Pump extends SolarThermalSystemComponent {
   workInput: number; // kJ/kg
   pumpEfficiency: number;
   volume: number; // m^3/kg
@@ -53,12 +53,13 @@ export class Pump extends SolarThermalSystemComponent {
     return outletEnthalpy;
   }
 
-  // Assume reversible pump, therefore delEntropy = 0
   public outletEntropyCalculation() {
-    return this.inletEntropyCalculation();
+    const outletTemp = this.outletTemperatureCalculation();
+    const outletEntropy = this.eos.entropyCalculation(outletTemp, this.volume);
+    return outletEntropy;
   }
 
-  public outletTemperature() {
+  public outletTemperatureCalculation() {
     const outletEnthalpy = this.outletEnthalpyCalculation();
     const outletTemp = bisection(
       this.eos.enthalpyCalculation,
