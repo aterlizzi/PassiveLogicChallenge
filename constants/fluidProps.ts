@@ -1,12 +1,12 @@
 import { FluidProperties, FluidType } from "../types/FluidType";
 
-export interface FluidsProps {
+export interface ThermodynamicFluidsProps {
   [key: number]: FluidProperties;
 }
 
 // These should really be coming from a database and not stored in a javascript object...
 // From: Elliott and Lira, 2nd Edition
-const thermodynamicFluidsProperties: FluidsProps = {
+const thermodynamicFluidsProperties: ThermodynamicFluidsProps = {
   [FluidType.CarbonDioxide]: {
     criticalTemperature: 304.2, // K
     criticalPressure: 73.82, // bar
