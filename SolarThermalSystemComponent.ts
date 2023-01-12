@@ -86,6 +86,8 @@ class Pump extends SolarThermalSystemComponent {
     );
     return inletEntropy;
   }
+
+  public outletEntropyCalculation() {}
 }
 
 class StorageTank extends SolarThermalSystemComponent {
