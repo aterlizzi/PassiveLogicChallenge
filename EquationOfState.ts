@@ -1,6 +1,6 @@
 import { FluidProperties } from "./types/FluidType";
 
-class EquationOfState {
+export abstract class EquationOfState {
   // Fluid properties
   private fluidProps: FluidProperties;
 
@@ -19,6 +19,10 @@ class EquationOfState {
 
   // Gas Constant (R) [Units: L-bar/mol-K = hJ/mol-K] (Sets energy unit as hJ = 10^2 J)
   protected R = 8.314 * (10 ^ -2);
+
+  //  Required methods
+  abstract entropyCalculation(temperature: number, volume: number): number;
+  abstract enthalpyCalculation(temperature: number, volume: number): number;
 
   constructor(
     fluidProps: FluidProperties,
