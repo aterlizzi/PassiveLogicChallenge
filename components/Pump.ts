@@ -1,27 +1,8 @@
-import { EquationOfState } from "./EquationOfState";
+import EquationOfState from "../EquationOfState";
+import bisection from "../utils/bisection";
+import SolarThermalSystemComponent from "./SolarThermalSystemComponent";
 
-class SolarThermalSystemComponent {
-  name: string;
-  temperatureInlet: number;
-  temperatureOutlet: number;
-  eos: EquationOfState;
-
-  constructor(name: string, eos: EquationOfState) {
-    this.name = name;
-    this.eos = eos;
-  }
-}
-
-class SolarPanel extends SolarThermalSystemComponent {
-  heatInputFromSun: number;
-
-  constructor(eos: EquationOfState, heatInputFromSun: number) {
-    const name = "SolarPanel";
-    super(name, eos);
-    this.heatInputFromSun = heatInputFromSun;
-  }
-}
-
+// In an ideal scenario, you would use a more sophisticated setup capable of solving systems of equations, such that so many knowns are not needed.
 // Known volume, since liquids are approximately incompressible.
 // Known inlet temp
 // Known inlet pressure
@@ -29,12 +10,12 @@ class SolarPanel extends SolarThermalSystemComponent {
 // Calc outlet temp
 // Calc enthalpy
 // Calc entropy
-class Pump extends SolarThermalSystemComponent {
-  workInput: number;
+export class Pump extends SolarThermalSystemComponent {
+  workInput: number; // kJ/kg
   pumpEfficiency: number;
-  volume: number;
-  inletPressure: number;
-  inletTemperature: number;
+  volume: number; // m^3/kg
+  inletPressure: number; // kPa
+  inletTemperature: number; // K
 
   constructor(
     eos: EquationOfState,
@@ -58,11 +39,37 @@ class Pump extends SolarThermalSystemComponent {
     return idealWork;
   }
 
+  //   Outlet value functions.
   public outletPressureCalculation() {
     const idealWork = this.idealWorkCalculation();
     const delPressure = idealWork / this.volume;
     const outletPressure = delPressure + this.inletPressure;
     return outletPressure;
+  }
+
+  public outletEnthalpyCalculation() {
+    const inletEnthalpy = this.inletEnthalpyCalculation();
+    const outletEnthalpy = this.workInput + inletEnthalpy;
+    return outletEnthalpy;
+  }
+
+  // Assume reversible pump, therefore delEntropy = 0
+  public outletEntropyCalculation() {
+    return this.inletEntropyCalculation();
+  }
+
+  public outletTemperature() {
+    const outletEnthalpy = this.outletEnthalpyCalculation();
+    const outletTemp = bisection(
+      this.eos.enthalpyCalculation,
+      outletEnthalpy,
+      0,
+      20000,
+      0.01,
+      1000,
+      this.volume
+    );
+    return outletTemp;
   }
 
   public inletEnthalpyCalculation() {
@@ -73,29 +80,11 @@ class Pump extends SolarThermalSystemComponent {
     return inletEnthalpy;
   }
 
-  public outletEnthalpyCalculation() {
-    const inletEnthalpy = this.inletEnthalpyCalculation();
-    const outletEnthalpy = this.workInput + inletEnthalpy;
-    return outletEnthalpy;
-  }
-
   public inletEntropyCalculation() {
     const inletEntropy = this.eos.entropyCalculation(
       this.inletTemperature,
       this.volume
     );
     return inletEntropy;
-  }
-
-  public outletEntropyCalculation() {}
-}
-
-class StorageTank extends SolarThermalSystemComponent {
-  heatLossToSurroundings: number;
-
-  constructor(eos: EquationOfState, heatLossToSurroundings: number) {
-    const name = "StorageTank";
-    super(name, eos);
-    this.heatLossToSurroundings = heatLossToSurroundings;
   }
 }

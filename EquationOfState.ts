@@ -2,7 +2,7 @@ import { FluidProperties } from "./types/FluidType";
 
 export abstract class EquationOfState {
   // Fluid properties
-  private fluidProps: FluidProperties;
+  public fluidProps: FluidProperties;
 
   // Equation of State Parameters, SVAS-8th Edition, Table 3.1
   private omega: number;
@@ -18,7 +18,7 @@ export abstract class EquationOfState {
   private P0 = 1; // bar
 
   // Gas Constant (R) [Units: L-bar/mol-K = hJ/mol-K] (Sets energy unit as hJ = 10^2 J)
-  protected R = 8.314 * (10 ^ -2);
+  protected R = 8.314 * 10 ** -2;
 
   //  Required methods
   abstract entropyCalculation(temperature: number, volume: number): number;
@@ -43,7 +43,7 @@ export abstract class EquationOfState {
   // Cubic Equation of State (SVAS-8th Edition, Section 3.6, Eqn. 3.41)
   protected aCoefficientCalculation() {
     const { criticalTemperature: Tc, criticalPressure: Pc } = this.fluidProps;
-    const a = (this.alpha * this.psi * (this.R ^ 2) * (Tc ^ 2)) / Pc; // SVAS-8th Edition, Eqn. 3.45, Units:L^2-bar/mol^2
+    const a = (this.alpha * this.psi * this.R ** 2 * Tc ** 2) / Pc; // SVAS-8th Edition, Eqn. 3.45, Units:L^2-bar/mol^2
     return a;
   }
 
@@ -78,17 +78,17 @@ export abstract class EquationOfState {
       const heatCapacity =
         (A * T -
           A * this.T0 +
-          (B * ((T ^ 2) - (this.T0 ^ 2))) / 2 +
-          (C * ((T ^ 3) - (this.T0 ^ 3))) / 3 +
-          (D * ((T ^ 4) - (this.T0 ^ 4))) / 4) /
+          (B * (T ** 2 - this.T0 ** 2)) / 2 +
+          (C * (T ** 3 - this.T0 ** 3)) / 3 +
+          (D * (T ** 4 - this.T0 ** 4)) / 4) /
         100;
       return heatCapacity;
     }
     const heatCapacity =
       (A * (Math.log(T) - Math.log(this.T0)) +
         B * (T - this.T0) +
-        (C * ((T ^ 2) - (this.T0 ^ 2))) / 2 +
-        (D * ((T ^ 3) - (this.T0 ^ 3))) / 3) /
+        (C * (T ** 2 - this.T0 ** 2)) / 2 +
+        (D * (T ** 3 - this.T0 ** 3)) / 3) /
       100;
     return heatCapacity;
   }
