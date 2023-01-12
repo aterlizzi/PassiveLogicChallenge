@@ -2,20 +2,20 @@ import { FluidProperties } from "./types/FluidType";
 
 class EquationOfState {
   // Fluid properties
-  protected fluidProps: FluidProperties;
+  private fluidProps: FluidProperties;
 
   // Equation of State Parameters, SVAS-8th Edition, Table 3.1
-  protected omega: number;
-  protected psi: number;
-  protected sigma: number;
-  protected epsilon: number;
-  protected alpha: number;
+  private omega: number;
+  private psi: number;
+  private sigma: number;
+  private epsilon: number;
+  private alpha: number;
 
   //  Reference ideal gas enthalpy and entropy at 300K and 1 bar, (Arbitrary, these values chosen to match NIST database)
-  protected H0 = 225.35; // hJ/mol
-  protected S0 = 1.20076; // hJ/mol-K
-  protected T0 = 300; // K
-  protected P0 = 1; // bar
+  private H0 = 225.35; // hJ/mol
+  private S0 = 1.20076; // hJ/mol-K
+  private T0 = 300; // K
+  private P0 = 1; // bar
 
   // Gas Constant (R) [Units: L-bar/mol-K = hJ/mol-K] (Sets energy unit as hJ = 10^2 J)
   protected R = 8.314 * (10 ^ -2);
