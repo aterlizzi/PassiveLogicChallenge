@@ -49,7 +49,7 @@ export default class Pipe extends SolarThermalSystemComponent {
     return outletPressure;
   }
 
-  // This is an incredibly simplified model for how temperature gradient behaves and assumes both constant density of fluid and heat capacity.
+  // This is an incredibly simplified model for how the temperature gradient behaves and assumes both constant density of fluid and heat capacity.
   public outletTemperatureCalculation() {
     const { innerSurfaceTemperature } = this.heatTransferProps;
     const { length: L } = this.pipeProps;

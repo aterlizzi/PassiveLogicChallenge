@@ -24,12 +24,4 @@ export default class StorageTank extends SolarThermalSystemComponent {
     const outletEnthalpy = this.heatTransferToSurroundings + inletEnthalpy;
     return outletEnthalpy;
   }
-
-  public inletEntropyCalculation() {
-    const inletEntropy = this.eos.entropyCalculation(
-      this.inletTemperature,
-      this.volume
-    );
-    return inletEntropy;
-  }
 }

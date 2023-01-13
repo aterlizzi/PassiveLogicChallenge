@@ -48,12 +48,4 @@ export default class Pump extends SolarThermalSystemComponent {
     const outletEnthalpy = this.workInput + inletEnthalpy;
     return outletEnthalpy;
   }
-
-  public inletEntropyCalculation() {
-    const inletEntropy = this.eos.entropyCalculation(
-      this.inletTemperature,
-      this.volume
-    );
-    return inletEntropy;
-  }
 }
