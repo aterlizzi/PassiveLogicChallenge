@@ -15,15 +15,16 @@ export default class Pipe extends SolarThermalSystemComponent {
     pipeProps: PipeProperties,
     heatTransferProps: HeatTransferProperties,
     avgVelocity: number,
+    volume: number,
     inletPressure: number,
-    inletTemperature: number,
-    volume: number
+    inletTemperature: number
   ) {
     const name = "Pipe";
     super(name, eos, volume, inletTemperature);
     this.pipeProps = pipeProps;
     this.avgVelocity = avgVelocity;
     this.inletPressure = inletPressure;
+    this.heatTransferProps = heatTransferProps;
   }
 
   // Pressure drop in a straight pipe. We are neglecting the L-shaped turns of the pipe for simplicity.

@@ -10,9 +10,9 @@ export default class StorageTank extends SolarThermalSystemComponent {
 
   constructor(
     eos: EquationOfState,
+    heatTransferToSurroundings: number,
     volume: number,
-    inletTemperature: number,
-    heatTransferToSurroundings: number
+    inletTemperature: number
   ) {
     const name = "StorageTank";
     super(name, eos, volume, inletTemperature);
