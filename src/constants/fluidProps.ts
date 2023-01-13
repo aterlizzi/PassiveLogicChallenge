@@ -1,7 +1,7 @@
-import { FluidProperties, FluidType } from "../types/FluidType";
+import { FluidProperties, FluidType } from '../types/FluidType'
 
 export interface ThermodynamicFluidsProps {
-  [key: number]: FluidProperties;
+  [key: number]: FluidProperties
 }
 
 // These should really be coming from a database and not stored in a javascript object...
@@ -43,6 +43,6 @@ const thermodynamicFluidsProperties: ThermodynamicFluidsProps = {
     C: 0.0000268,
     D: -0.00000001168,
   },
-};
+}
 
-export default thermodynamicFluidsProperties;
+export default thermodynamicFluidsProperties

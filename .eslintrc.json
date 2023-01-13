@@ -1,0 +1,14 @@
+{
+  "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "/Users/aidanterlizzi/Desktop/Main/Coding/PassiveLogic"
+  },
+  "rules": {
+    "prefer-destructuring": "off",
+    "max-classes-per-file": "off",
+    "no-underscore-dangle": "off",
+    "import/no-cycle": "off",
+    "no-plusplus": "off"
+  }
+}

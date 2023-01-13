@@ -1,4 +1,4 @@
-import { PipeProperties } from "./../types/PipeProperties";
+import { PipeProperties } from '../types/PipeProperties'
 
 // Steel sheet pipe properties
 const pipeProps: PipeProperties = {
@@ -7,6 +7,6 @@ const pipeProps: PipeProperties = {
   length: 12, // meters
   thermalConductivity: 45, // W/(mK)
   specificHeat: 0.472, // J/g-°C
-};
+}
 
-export default pipeProps;
+export default pipeProps

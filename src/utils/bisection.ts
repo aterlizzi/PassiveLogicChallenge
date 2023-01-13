@@ -2,24 +2,26 @@
 export default function bisection(
   func: (x: number, y: number) => number,
   target: number,
-  a: number,
-  b: number,
+  upperBound: number,
+  lowerBound: number,
   tolerance: number,
   maxIter: number,
   y: number
 ): number {
-  let midpoint = (a + b) / 2;
-  let value = func(midpoint, y);
-  let iter = 0;
+  let a = upperBound
+  let b = lowerBound
+  let midpoint = (a + b) / 2
+  let value = func(midpoint, y)
+  let iter = 0
   while (Math.abs(value - target) > tolerance || maxIter > iter) {
-    iter++;
+    iter++
     if (value > target) {
-      b = midpoint;
+      b = midpoint
     } else {
-      a = midpoint;
+      a = midpoint
     }
-    midpoint = (a + b) / 2;
-    value = func(midpoint, y);
+    midpoint = (a + b) / 2
+    value = func(midpoint, y)
   }
-  return midpoint;
+  return midpoint
 }
