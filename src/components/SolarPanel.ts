@@ -16,6 +16,12 @@ export default class SolarPanel extends SolarThermalSystemComponent {
     const name = 'SolarPanel'
     super(name, fluid, boundaryConditions)
     this.solarProps = solarProperties
+
+    // Initialize volume for Liquid Systems, since we assume they do not change (incompressible)
+    this.fluid.getVolume(
+      boundaryConditions.initialTemperature,
+      boundaryConditions.initialPressure
+    )
   }
 
   private heatInputCalculation() {
@@ -39,11 +45,8 @@ export default class SolarPanel extends SolarThermalSystemComponent {
     return outletTemperature
   }
 
-  // public outletEnthalpyCalculation() {
-  //   const molarFlowRate = this.volumetricFlowRateToMol()
-  //   const inletEnthalpy = this.inletEnthalpyCalculation() * molarFlowRate // kJ/mol * mol/s = kJ/s
-  //   const totalHeatInput = this.totalPowerGenerationCalculation()
-  //   const outletEnthalpy = totalHeatInput + inletEnthalpy
-  //   return outletEnthalpy
-  // }
+  // We assume this is a constant pressure step
+  public outletPressureCalculation(): number {
+    return this.boundaryConditions.initialPressure
+  }
 }

@@ -18,7 +18,12 @@ export default class Pump extends SolarThermalSystemComponent {
     this.pumpProps = pumpProps
   }
 
-  public outputPressureCalculation() {
+  public outletPressureCalculation() {
     return this.pumpProps.pressureHead + this.boundaryConditions.initialPressure
+  }
+
+  // Assume pump temperature increases are negligible.
+  public outletTemperatureCalculation(): number {
+    return this.boundaryConditions.initialTemperature
   }
 }

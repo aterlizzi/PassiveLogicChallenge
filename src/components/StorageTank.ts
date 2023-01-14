@@ -1,18 +1,47 @@
 import BoundaryConditions from '../types/BoundaryConditions'
+import { StorageTankProperties } from '../types/StorageTankProps'
 import Fluid from './Fluid'
 import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 
 // Treating StorageTank as a heat dissipator where heat is "lost" to the surroundings.
 // Assume constant pressure step where inlet and outlet pressures are equal.
 export default class StorageTank extends SolarThermalSystemComponent {
-  constructor(fluid: Fluid, boundaryConditions: BoundaryConditions) {
+  storageTankProps: StorageTankProperties
+
+  constructor(
+    fluid: Fluid,
+    storageTankProps: StorageTankProperties,
+    boundaryConditions: BoundaryConditions
+  ) {
     const name = 'StorageTank'
     super(name, fluid, boundaryConditions)
+    this.storageTankProps = storageTankProps
   }
 
-  public outletEnthalpyCalculation() {
-    const inletEnthalpy = this.inletEnthalpyCalculation()
-    const outletEnthalpy = this.heatTransferToSurroundings + inletEnthalpy
-    return outletEnthalpy
+  private massFlowRateCalculation() {
+    const { density } = this.fluid.data
+    const kgPerSecond = (this.fluid.volumetricFlowRate / 1000) * density
+    return kgPerSecond
+  }
+
+  // Assume this is a constant pressure step.
+  public outletPressureCalculation(): number {
+    return this.boundaryConditions.initialPressure
+  }
+
+  public outletTemperatureCalculation(): number {
+    return this.storageTankProps.desiredOutletTemperature
+  }
+
+  public heatGeneratedCalculation(): number {
+    const { heatCapacity: Cp } = this.fluid.data
+    const totalMass =
+      this.massFlowRateCalculation() * this.storageTankProps.residenceTime
+    return (
+      totalMass *
+      Cp *
+      (this.outletTemperatureCalculation() -
+        this.boundaryConditions.initialTemperature)
+    )
   }
 }
