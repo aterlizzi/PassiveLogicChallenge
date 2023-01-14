@@ -4,4 +4,6 @@ export interface PipeProperties {
   length: number
   diameter: number
   fanningFrictionFactor: number
+  innerSurfaceTemperature: number
+  heatTransferCoefficient: number
 }

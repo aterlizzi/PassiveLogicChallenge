@@ -1,20 +1,13 @@
-import { EquationOfState } from '../EquationOfState'
+import BoundaryConditions from '../types/BoundaryConditions'
+import Fluid from './Fluid'
 import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 
 // Treating StorageTank as a heat dissipator where heat is "lost" to the surroundings.
 // Assume constant pressure step where inlet and outlet pressures are equal.
 export default class StorageTank extends SolarThermalSystemComponent {
-  heatTransferToSurroundings: number
-
-  constructor(
-    eos: EquationOfState,
-    heatTransferToSurroundings: number,
-    volume: number,
-    inletTemperature: number
-  ) {
+  constructor(fluid: Fluid, boundaryConditions: BoundaryConditions) {
     const name = 'StorageTank'
-    super(name, eos, volume, inletTemperature)
-    this.heatTransferToSurroundings = heatTransferToSurroundings
+    super(name, fluid, boundaryConditions)
   }
 
   public outletEnthalpyCalculation() {

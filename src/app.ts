@@ -6,7 +6,6 @@ import pipeProps from './constants/pipeProps'
 import SolarPanel from './components/SolarPanel'
 import HeatTransferProperties from './types/HeatTransferProperties'
 import Pump from './components/Pump'
-import StorageTank from './components/StorageTank'
 
 // Constants
 // Fluid properties for Carbon Dioxide

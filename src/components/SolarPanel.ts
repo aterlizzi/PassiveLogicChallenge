@@ -1,51 +1,41 @@
-import { EquationOfState } from '../EquationOfState'
+import BoundaryConditions from '../types/BoundaryConditions'
+import { SolarProperties } from '../types/SolarProps'
+import Fluid from './Fluid'
 import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 
 // I'm choosing to treat the solar panel as a "heater", such that it receives heat which heats the fluid. In real world applications, solar panels might additionally compress or pump the fluid.
 // Assuming this is a constant pressure step, where inlet and outlet pressures are equal.
 export default class SolarPanel extends SolarThermalSystemComponent {
-  powerGen: number // W/m^2
-
-  solarSize: number // m^2
-
-  volumetricFlowRate: number // L/s
-
-  residenceTime: number // seconds
+  solarProps: SolarProperties
 
   constructor(
-    eos: EquationOfState,
-    powerGen: number,
-    solarSize: number,
-    volumetricFlowRate: number,
-    residenceTime: number,
-    inletTemperature: number,
-    volume: number
+    fluid: Fluid,
+    solarProperties: SolarProperties,
+    boundaryConditions: BoundaryConditions
   ) {
     const name = 'SolarPanel'
-    super(name, eos, volume, inletTemperature)
-    this.powerGen = powerGen
-    this.solarSize = solarSize
-    this.volumetricFlowRate = volumetricFlowRate
-    this.residenceTime = residenceTime
+    super(name, fluid, boundaryConditions)
+    this.solarProps = solarProperties
   }
 
   private heatInputCalculation() {
-    const heatInput = this.solarSize * this.powerGen // J/s or W
-    return (heatInput / 1000) * this.residenceTime // kJ
+    const heatInput = this.solarProps.solarSize * this.solarProps.powerGen // J/s or W
+    return (heatInput / 1000) * this.solarProps.residenceTime // kJ
   }
 
   private massFlowRateCalculation() {
-    const { density } = this.eos.fluidProps
-    const kgPerSecond = (this.volumetricFlowRate / 1000) * density
+    const { density } = this.fluid.data
+    const kgPerSecond = (this.fluid.volumetricFlowRate / 1000) * density
     return kgPerSecond
   }
 
   public outletTemperatureCalculation(): number {
     const heatInput = this.heatInputCalculation()
-    const { heatCapacity: Cp } = this.eos.fluidProps
-    const totalMass = this.massFlowRateCalculation() * this.residenceTime // Kg
+    const { heatCapacity: Cp } = this.fluid.data
+    const totalMass =
+      this.massFlowRateCalculation() * this.solarProps.residenceTime // Kg
     const outletTemperature =
-      heatInput / (totalMass * Cp) + this.inletTemperature
+      heatInput / (totalMass * Cp) + this.boundaryConditions.initialTemperature
     return outletTemperature
   }
 

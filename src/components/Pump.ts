@@ -1,35 +1,24 @@
-import { EquationOfState } from '../EquationOfState'
+import BoundaryConditions from '../types/BoundaryConditions'
+import { PumpProperties } from '../types/PumpProps'
+import Fluid from './Fluid'
 import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 
 // In an ideal scenario, you would use a more sophisticated setup capable of solving systems of equations, such that so many knowns are not needed.
 // For pumps, temperature change is negligible.
 export default class Pump extends SolarThermalSystemComponent {
-  pumpEfficiency: number
-
-  inletPressure: number // kPa
-
-  volumetricFlowRate: number
-
-  pumpHead: number
+  pumpProps: PumpProperties
 
   constructor(
-    eos: EquationOfState,
-    pumpEfficiency: number,
-    volumetricFlowRate: number,
-    pumpHead: number,
-    volume: number,
-    inletPressure: number,
-    inletTemperature: number
+    fluid: Fluid,
+    pumpProps: PumpProperties,
+    boundaryConditions: BoundaryConditions
   ) {
     const name = 'Pump'
-    super(name, eos, volume, inletTemperature)
-    this.pumpHead = pumpHead
-    this.pumpEfficiency = pumpEfficiency
-    this.volumetricFlowRate = volumetricFlowRate
-    this.inletPressure = inletPressure
+    super(name, fluid, boundaryConditions)
+    this.pumpProps = pumpProps
   }
 
   public outputPressureCalculation() {
-    return this.pumpHead + this.inletPressure
+    return this.pumpProps.pressureHead + this.boundaryConditions.initialPressure
   }
 }
