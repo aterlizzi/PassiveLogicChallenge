@@ -1,4 +1,4 @@
-import { UserInput } from './types/Server'
+import { ComponentData, UserInput } from './types/Server'
 import ComponentFactory from './components/ComponentFactory'
 import thermodynamicFluidsProperties from './constants/fluidProps'
 import { FluidType } from './types/FluidType'
@@ -69,13 +69,25 @@ const input: UserInput = {
       },
     },
   ],
-  fluid: new Liquid(fluidData, eos, 0.063),
+  fluid: new Liquid(fluidData, eos, 0.063), // fluid contains information about the fluid and its thermodynamics.
   boundaryConditions: {
     initialPressure: 1, // bar
     initialTemperature: 30 + 273.15, // K
   },
 }
 
-const factory = new ComponentFactory()
-
-// Define Equation of State to be used in approximations of thermodynamic properties.
+let boundaryConditions = input.boundaryConditions
+input.components.forEach((componentData: ComponentData) => {
+  const component = ComponentFactory.createComponent(
+    componentData.component,
+    input.fluid,
+    componentData.data,
+    boundaryConditions
+  )
+  const outletTemp = component.outletTemperatureCalculation()
+  const outletPressure = component.outletPressureCalculation()
+  boundaryConditions = {
+    initialPressure: outletPressure,
+    initialTemperature: outletTemp,
+  }
+})
