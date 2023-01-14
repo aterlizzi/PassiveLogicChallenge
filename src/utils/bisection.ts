@@ -13,7 +13,7 @@ export default function bisection(
   let midpoint = (a + b) / 2
   let value = func(midpoint, y)
   let iter = 0
-  while (Math.abs(value - target) > tolerance || maxIter > iter) {
+  while (Math.abs(value - target) > tolerance && maxIter > iter) {
     iter++
     if (value > target) {
       b = midpoint

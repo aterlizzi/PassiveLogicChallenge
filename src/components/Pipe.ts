@@ -7,17 +7,17 @@ import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 export default class Pipe extends SolarThermalSystemComponent {
   pipeProps: PipeProperties
 
-  avgVelocity: number
-
   inletPressure: number
 
   heatTransferProps: HeatTransferProperties
+
+  volumetricFlowRate: number
 
   constructor(
     eos: EquationOfState,
     pipeProps: PipeProperties,
     heatTransferProps: HeatTransferProperties,
-    avgVelocity: number,
+    volumetricFlowRate: number,
     volume: number,
     inletPressure: number,
     inletTemperature: number
@@ -25,32 +25,35 @@ export default class Pipe extends SolarThermalSystemComponent {
     const name = 'Pipe'
     super(name, eos, volume, inletTemperature)
     this.pipeProps = pipeProps
-    this.avgVelocity = avgVelocity
     this.inletPressure = inletPressure
     this.heatTransferProps = heatTransferProps
+    this.volumetricFlowRate = volumetricFlowRate
   }
 
   // Pressure drop in a straight pipe. We are neglecting the L-shaped turns of the pipe for simplicity.
   private pressureDropCalculation() {
     const { fanningFrictionFactor: f, diameter: D, length: L } = this.pipeProps
+    const avgVelocity =
+      this.volumetricFlowRate / 1000 / ((Math.PI * D ** 2) / 4)
     const { density } = this.eos.fluidProps
-    const delPressure = 2 * density * this.avgVelocity ** 2 * (L / D) * f
+    const delPressure = 2 * density * avgVelocity ** 2 * (L / D) * f
     return delPressure
   }
 
   private alphaCalculation() {
     const { heatTransferCoefficient } = this.heatTransferProps
     const { specificHeat: Cp, diameter: D } = this.pipeProps
+    const avgVelocity =
+      this.volumetricFlowRate / 1000 / ((Math.PI * D ** 2) / 4)
     const { density: row } = this.eos.fluidProps
-    const alpha =
-      (4 * heatTransferCoefficient) / (Cp * row * this.avgVelocity * D)
+    const alpha = (4 * heatTransferCoefficient) / (Cp * row * avgVelocity * D)
     return alpha
   }
 
   public outletPressureCalculation() {
     const delPressure = this.pressureDropCalculation()
-    const outletPressure = delPressure + this.inletPressure
-    return outletPressure
+    const outletPressure = this.inletPressure * 100000 - delPressure
+    return outletPressure / 100000
   }
 
   // This is an incredibly simplified model for how the temperature gradient behaves and assumes both constant density of fluid and heat capacity.

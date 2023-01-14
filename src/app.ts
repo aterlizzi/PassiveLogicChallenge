@@ -10,69 +10,69 @@ import StorageTank from './components/StorageTank'
 
 // Constants
 // Fluid properties for Carbon Dioxide
-const carbonDioxideProps = thermodynamicFluidsProperties[FluidType.Water]
-const avgVelocity = 1.5 // m/s
-const solarInletTemp = 45 // C
-const solarInletPressure = 20 // kPa
-const solarPanelSize = 1 // m^2
-const solarPowerGen = 156 // W/m^2
-const volume = 1 // m^3
-const workInput = 5 // kJ/kg
+const waterProps = thermodynamicFluidsProperties[FluidType.Water]
+const solarPowerGen = 1000 // W/m^2
+const solarSize = 2 // m^2
+const volumetricFlowRate = 0.063 // L/s
+const solarInletTemp = 30 + 273.15 // K
+const volume = 0.018094 // L/mol
+const residenceTime = 30 // seconds
+const solarOutletPressure = 1 // bar
 const pumpEfficiency = 0.75
+const pressureHead = 2 // bar
 const heatTransferProps: HeatTransferProperties = {
-  innerSurfaceTemperature: 45, // C
+  innerSurfaceTemperature: 30 + 273.15, // K
   heatTransferCoefficient: 11.3, //
 }
-const heatTransferToSurroundings = 100
+// const heatTransferToSurroundings = 100
 
 // Define Equation of State to be used in approximations of thermodynamic properties.
-const eos = new VanDerWaalsEOS(carbonDioxideProps)
-
-// Cycle: SolarPanel -> Pipe -> Pump -> Pipe -> StorageTank -> Pipe -> SolarPanel
-const solarPanel = new SolarPanel(
+const eos = new VanDerWaalsEOS(waterProps)
+const solar = new SolarPanel(
   eos,
-  solarPanelSize,
   solarPowerGen,
+  solarSize,
+  volumetricFlowRate,
+  residenceTime,
   solarInletTemp,
-  solarInletPressure,
   volume
 )
-const solarOutletPressure = solarInletPressure
-const solarOutletTemp = solarPanel.outletTemperatureCalculation()
+const solarOutTemp = solar.outletTemperatureCalculation()
+console.log(solarOutTemp)
 const pipeOne = new Pipe(
   eos,
   pipeProps,
   heatTransferProps,
-  avgVelocity,
+  volumetricFlowRate,
   volume,
   solarOutletPressure,
-  solarOutletTemp
+  solarOutTemp
 )
-const pipeOneOutletPressure = pipeOne.outletPressureCalculation()
-const pipeOneOutletTemp = pipeOne.outletTemperatureCalculation()
+let outletTemp = pipeOne.outletTemperatureCalculation()
+let outletPressure = pipeOne.outletPressureCalculation()
+console.log(outletTemp)
+console.log(outletPressure)
 const pump = new Pump(
   eos,
-  workInput,
   pumpEfficiency,
+  volumetricFlowRate,
+  pressureHead,
   volume,
-  pipeOneOutletPressure,
-  pipeOneOutletTemp
+  outletPressure,
+  outletTemp
 )
-const pumpOutletPressure = pump.outletPressureCalculation()
-const pumpOutletTemp = pump.outletTemperatureCalculation()
-const tank = new StorageTank(
-  eos,
-  heatTransferToSurroundings,
-  volume,
-  pumpOutletTemp
-)
-const tankOutletTemp = tank.outletTemperatureCalculation()
+outletPressure = pump.outputPressureCalculation()
+console.log(pump.outputPressureCalculation())
 const pipeTwo = new Pipe(
   eos,
   pipeProps,
   heatTransferProps,
-  avgVelocity,
+  volumetricFlowRate,
   volume,
-  pumpOutletPressure,
-  tankOutletTemp
+  outletPressure,
+  outletTemp
 )
+outletTemp = pipeTwo.outletTemperatureCalculation()
+outletPressure = pipeTwo.outletPressureCalculation()
+console.log(outletPressure)
+// Cycle: SolarPanel -> Pipe -> Pump -> Pipe -> StorageTank -> Pipe -> SolarPanel

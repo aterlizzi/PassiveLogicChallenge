@@ -6,7 +6,7 @@ export default abstract class SolarThermalSystemComponent {
 
   eos: EquationOfState
 
-  volume: number
+  volume: number // L/mol
 
   inletTemperature: number
 
@@ -27,12 +27,12 @@ export default abstract class SolarThermalSystemComponent {
   public outletTemperatureCalculation() {
     const outletEnthalpy = this.outletEnthalpyCalculation()
     const outletTemp = bisection(
-      this.eos.enthalpyCalculation,
+      this.eos.enthalpyCalculation.bind(this.eos),
       outletEnthalpy,
+      10000,
       0,
-      20000,
-      0.01,
-      1000,
+      0.001,
+      10000,
       this.volume
     )
     return outletTemp

@@ -4,7 +4,7 @@ import { PipeProperties } from '../types/PipeProperties'
 const pipeProps: PipeProperties = {
   fanningFrictionFactor: 0.02,
   diameter: 0.3, // meters
-  length: 12, // meters
+  length: 5, // meters
   thermalConductivity: 45, // W/(mK)
   specificHeat: 0.472, // J/g-°C
 }

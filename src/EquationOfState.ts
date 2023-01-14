@@ -155,13 +155,13 @@ export default class VanDerWaalsEOS extends EquationOfState {
     const iEnthalpy = this.idealEnthalpyCalculation(temperature)
     const resEnthalpy = this.residualEnthalpyCalculation(temperature, volume)
     const enthalpy = iEnthalpy + resEnthalpy
-    return enthalpy
+    return enthalpy / 100 // kJ/mol
   }
 
   public entropyCalculation(temperature: number, volume: number) {
     const iEntropy = this.idealEntropyCalculation(temperature, volume)
     const resEntropy = this.residualEntropyCalculation(temperature, volume)
     const entropy = iEntropy + resEntropy
-    return entropy
+    return entropy / 100 // kJ/mol-K
   }
 }
