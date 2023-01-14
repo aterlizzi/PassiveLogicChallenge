@@ -19,13 +19,20 @@ export default abstract class Fluid {
     this.volumetricFlowRate = volumetricFlowRate
   }
 
-  abstract getDensity(): number
   abstract getVolume(temperature: number, pressure: number): number
+
+  public entropyCalculation(temperature: number, pressure: number) {
+    const volume = this.getVolume(temperature, pressure)
+    return this.eos.entropyCalculation(temperature, volume, this.data)
+  }
+
+  public enthalpyCalculation(temperature: number, pressure: number) {
+    const volume = this.getVolume(temperature, pressure)
+    return this.eos.enthalpyCalculation(temperature, volume, this.data)
+  }
 }
 
 export class Gas extends Fluid {
-  getDensity(): number {}
-
   getVolume(temperature: number, pressure: number): number {
     return bisection(
       this.eos.pressureCalculation.bind(this),
@@ -44,8 +51,6 @@ export class Gas extends Fluid {
 
 export class Liquid extends Fluid {
   volume: number = 0
-
-  getDensity(): number {}
 
   // I am neglecting volume change in liquids for simplicity, these generally change a small amount with temperature.
   getVolume(temperature: number, pressure: number): number {

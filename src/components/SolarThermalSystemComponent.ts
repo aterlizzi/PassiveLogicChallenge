@@ -10,6 +10,8 @@ export default abstract class SolarThermalSystemComponent {
 
   abstract outletPressureCalculation(): number
   abstract outletTemperatureCalculation(): number
+  abstract outletEnthalpyCalculation(): number
+  abstract outletEntropyCalculation(): number
 
   constructor(
     name: string,

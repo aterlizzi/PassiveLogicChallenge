@@ -26,4 +26,16 @@ export default class Pump extends SolarThermalSystemComponent {
   public outletTemperatureCalculation(): number {
     return this.boundaryConditions.initialTemperature
   }
+
+  public outletEnthalpyCalculation(): number {
+    const outletTemp = this.outletTemperatureCalculation()
+    const outletPressure = this.outletPressureCalculation()
+    return this.fluid.enthalpyCalculation(outletTemp, outletPressure)
+  }
+
+  public outletEntropyCalculation(): number {
+    const outletTemp = this.outletTemperatureCalculation()
+    const outletPressure = this.outletPressureCalculation()
+    return this.fluid.entropyCalculation(outletTemp, outletPressure)
+  }
 }

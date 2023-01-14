@@ -31,8 +31,7 @@ export default class SolarPanel extends SolarThermalSystemComponent {
 
   private massFlowRateCalculation() {
     const { density } = this.fluid.data
-    const kgPerSecond = (this.fluid.volumetricFlowRate / 1000) * density
-    return kgPerSecond
+    return (this.fluid.volumetricFlowRate / 1000) * density
   }
 
   public outletTemperatureCalculation(): number {
@@ -40,13 +39,25 @@ export default class SolarPanel extends SolarThermalSystemComponent {
     const { heatCapacity: Cp } = this.fluid.data
     const totalMass =
       this.massFlowRateCalculation() * this.solarProps.residenceTime // Kg
-    const outletTemperature =
+    return (
       heatInput / (totalMass * Cp) + this.boundaryConditions.initialTemperature
-    return outletTemperature
+    )
   }
 
   // We assume this is a constant pressure step
   public outletPressureCalculation(): number {
     return this.boundaryConditions.initialPressure
+  }
+
+  public outletEntropyCalculation(): number {
+    const outletTemp = this.outletTemperatureCalculation()
+    const outletPressure = this.outletPressureCalculation()
+    return this.fluid.entropyCalculation(outletTemp, outletPressure)
+  }
+
+  public outletEnthalpyCalculation(): number {
+    const outletTemp = this.outletTemperatureCalculation()
+    const outletPressure = this.outletPressureCalculation()
+    return this.fluid.entropyCalculation(outletTemp, outletPressure)
   }
 }
