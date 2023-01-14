@@ -61,9 +61,13 @@ export default class Pipe extends SolarThermalSystemComponent {
 
   public outletEnthalpyCalculation() {
     const outletTemperature = this.outletTemperatureCalculation()
+    const volume = this.fluid.getVolume(
+      outletTemperature,
+      this.outletPressureCalculation()
+    )
     const outletEnthalpy = this.eos.enthalpyCalculation(
       outletTemperature,
-      this.volume
+      volume
     )
     return outletEnthalpy
   }
