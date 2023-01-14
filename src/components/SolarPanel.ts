@@ -1,5 +1,5 @@
 import BoundaryConditions from '../types/BoundaryConditions'
-import { SolarProperties } from '../types/SolarProps'
+import { SolarProperties } from '../types/SolarProperties'
 import Fluid from './Fluid'
 import SolarThermalSystemComponent from './SolarThermalSystemComponent'
 
