@@ -26,7 +26,6 @@ export default class Pipe extends SolarThermalSystemComponent {
       this.boundaryConditions.initialTemperature,
       this.boundaryConditions.initialPressure
     )
-    console.log(density)
     const delPressure = 2 * density * avgVelocity ** 2 * (L / D) * f
     return delPressure
   }

@@ -35,13 +35,26 @@ export default class StorageTank extends SolarThermalSystemComponent {
 
   public heatGeneratedCalculation(): number {
     const { heatCapacity: Cp } = this.fluid.data
-    const totalMass =
-      this.massFlowRateCalculation() * this.storageTankProps.residenceTime
+    const massFlowRate = this.massFlowRateCalculation()
     return (
-      totalMass *
+      massFlowRate *
       Cp *
       (this.outletTemperatureCalculation() -
         this.boundaryConditions.initialTemperature)
+    )
+  }
+
+  public outletEnthalpyCalculation(): number {
+    return this.fluid.enthalpyCalculation(
+      this.outletTemperatureCalculation(),
+      this.outletPressureCalculation()
+    )
+  }
+
+  public outletEntropyCalculation(): number {
+    return this.fluid.entropyCalculation(
+      this.outletTemperatureCalculation(),
+      this.outletPressureCalculation()
     )
   }
 }

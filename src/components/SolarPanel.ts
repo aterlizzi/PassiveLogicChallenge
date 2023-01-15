@@ -26,7 +26,7 @@ export default class SolarPanel extends SolarThermalSystemComponent {
 
   private heatInputCalculation() {
     const heatInput = this.solarProps.solarSize * this.solarProps.powerGen // J/s or W
-    return (heatInput / 1000) * this.solarProps.residenceTime // kJ
+    return heatInput / 1000 // kJ/s
   }
 
   private massFlowRateCalculation() {
@@ -37,10 +37,10 @@ export default class SolarPanel extends SolarThermalSystemComponent {
   public outletTemperatureCalculation(): number {
     const heatInput = this.heatInputCalculation()
     const { heatCapacity: Cp } = this.fluid.data
-    const totalMass =
-      this.massFlowRateCalculation() * this.solarProps.residenceTime // Kg
+    const massFlowRate = this.massFlowRateCalculation() // Kg/s
     return (
-      heatInput / (totalMass * Cp) + this.boundaryConditions.initialTemperature
+      heatInput / (massFlowRate * Cp) +
+      this.boundaryConditions.initialTemperature
     )
   }
 

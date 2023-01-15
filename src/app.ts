@@ -4,6 +4,7 @@ import thermodynamicFluidsProperties from './constants/fluidProps'
 import { FluidType } from './types/FluidType'
 import { Liquid } from './components/Fluid'
 import VanDerWaalsEOS from './EquationOfState'
+import StorageTank from './components/StorageTank'
 
 const fluidData = thermodynamicFluidsProperties[FluidType.Water]
 const eos = new VanDerWaalsEOS()
@@ -25,7 +26,7 @@ const input: UserInput = {
         fanningFrictionFactor: 0.02,
         diameter: 0.1, // meters
         length: 5, // meters
-        thermalConductivity: 0.01663, // W/(mK)
+        thermalConductivity: 45, // W/(mK)
         specificHeat: 0.472, // J/g-°C
         innerSurfaceTemperature: 30 + 273.15, // K
         heatTransferCoefficient: 11.3, // People spend their entire lives trying to find the heatTransferCoefficient. So, needless to say this is an approximation.
@@ -53,7 +54,7 @@ const input: UserInput = {
       component: 'StorageTank',
       data: {
         desiredOutletTemperature: 30 + 273.15, // K
-        residenceTime: 30, // seconds
+        tankSize: 10, // seconds
       },
     },
     {
@@ -89,6 +90,11 @@ input.components.forEach((componentData: ComponentData) => {
   boundaryConditions = {
     initialPressure: outletPressure,
     initialTemperature: outletTemp,
+  }
+  if (component instanceof StorageTank) {
+    console.log(
+      `Heat delivered to home: ${-component.heatGeneratedCalculation()} kJ/s`
+    )
   }
   console.log(componentData.component, boundaryConditions)
 })
