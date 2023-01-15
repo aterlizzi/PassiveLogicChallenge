@@ -16,7 +16,6 @@ const input: UserInput = {
       data: {
         powerGen: 1000, // W/m^2
         solarSize: 2, // m^2
-        residenceTime: 30, // seconds
       },
     },
     // Steel sheet pipe properties. You can take this from a database somewhere. Obviously it shouldnt be manually inputted.
@@ -54,7 +53,6 @@ const input: UserInput = {
       component: 'StorageTank',
       data: {
         desiredOutletTemperature: 30 + 273.15, // K
-        tankSize: 10, // seconds
       },
     },
     {
@@ -91,10 +89,16 @@ input.components.forEach((componentData: ComponentData) => {
     initialPressure: outletPressure,
     initialTemperature: outletTemp,
   }
+  console.log('------------', component.name, '-----------')
   if (component instanceof StorageTank) {
     console.log(
       `Heat delivered to home: ${-component.heatGeneratedCalculation()} kJ/s`
     )
   }
-  console.log(componentData.component, boundaryConditions)
+  console.log({
+    outputPressure: `${outletPressure} bar`,
+    outputTemperature: `${outletTemp} K`,
+    outputEnthalpy: `${component.outletEnthalpyCalculation()} kJ/mol`,
+    outputEntropy: `${component.outletEntropyCalculation()} kJ/mol-K`,
+  })
 })

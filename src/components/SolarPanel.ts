@@ -58,6 +58,6 @@ export default class SolarPanel extends SolarThermalSystemComponent {
   public outletEnthalpyCalculation(): number {
     const outletTemp = this.outletTemperatureCalculation()
     const outletPressure = this.outletPressureCalculation()
-    return this.fluid.entropyCalculation(outletTemp, outletPressure)
+    return this.fluid.enthalpyCalculation(outletTemp, outletPressure)
   }
 }
