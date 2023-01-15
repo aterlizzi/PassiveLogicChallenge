@@ -38,7 +38,7 @@ export class Gas extends Fluid {
     return bisection(
       this.eos.pressureCalculation.bind(this.eos),
       pressure,
-      5,
+      100,
       0,
       0.01,
       10000,
@@ -63,7 +63,7 @@ export class Liquid extends Fluid {
     this.volume = bisection(
       this.eos.pressureCalculation.bind(this.eos),
       pressure,
-      5,
+      100,
       0,
       0.01,
       10000,

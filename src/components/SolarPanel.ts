@@ -30,7 +30,10 @@ export default class SolarPanel extends SolarThermalSystemComponent {
   }
 
   private massFlowRateCalculation() {
-    const { density } = this.fluid.data
+    const density = this.fluid.getDensity(
+      this.boundaryConditions.initialTemperature,
+      this.boundaryConditions.initialPressure
+    )
     return (this.fluid.volumetricFlowRate / 1000) * density
   }
 
