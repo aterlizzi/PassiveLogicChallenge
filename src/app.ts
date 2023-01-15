@@ -23,7 +23,7 @@ const input: UserInput = {
       component: 'Pipe',
       data: {
         fanningFrictionFactor: 0.02,
-        diameter: 0.3, // meters
+        diameter: 0.1, // meters
         length: 5, // meters
         thermalConductivity: 45, // W/(mK)
         specificHeat: 0.472, // J/g-°C
@@ -41,7 +41,7 @@ const input: UserInput = {
       component: 'Pipe',
       data: {
         fanningFrictionFactor: 0.02,
-        diameter: 0.3, // meters
+        diameter: 0.1, // meters
         length: 3, // meters
         thermalConductivity: 45, // W/(mK)
         specificHeat: 0.472, // J/g-°C
@@ -60,7 +60,7 @@ const input: UserInput = {
       component: 'Pipe',
       data: {
         fanningFrictionFactor: 0.02,
-        diameter: 0.3, // meters
+        diameter: 0.1, // meters
         length: 8, // meters
         thermalConductivity: 45, // W/(mK)
         specificHeat: 0.472, // J/g-°C
@@ -90,4 +90,5 @@ input.components.forEach((componentData: ComponentData) => {
     initialPressure: outletPressure,
     initialTemperature: outletTemp,
   }
+  console.log(componentData.component, boundaryConditions)
 })

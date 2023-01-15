@@ -35,7 +35,7 @@ export default abstract class Fluid {
 export class Gas extends Fluid {
   getVolume(temperature: number, pressure: number): number {
     return bisection(
-      this.eos.pressureCalculation.bind(this),
+      this.eos.pressureCalculation.bind(this.eos),
       pressure,
       5,
       0,
@@ -56,7 +56,7 @@ export class Liquid extends Fluid {
   getVolume(temperature: number, pressure: number): number {
     if (this.volume) return this.volume
     this.volume = bisection(
-      this.eos.pressureCalculation.bind(this),
+      this.eos.pressureCalculation.bind(this.eos),
       pressure,
       5,
       0,

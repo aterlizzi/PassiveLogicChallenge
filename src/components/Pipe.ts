@@ -27,19 +27,6 @@ export default class Pipe extends SolarThermalSystemComponent {
     return delPressure
   }
 
-  private alphaCalculation() {
-    const {
-      specificHeat: Cp,
-      diameter: D,
-      heatTransferCoefficient: h,
-    } = this.pipeProps
-    const avgVelocity =
-      this.fluid.volumetricFlowRate / 1000 / ((Math.PI * D ** 2) / 4)
-    const { density: row } = this.fluid.data
-    const alpha = (4 * h) / (Cp * row * avgVelocity * D)
-    return alpha
-  }
-
   public outletPressureCalculation() {
     const delPressure = this.pressureDropCalculation()
     const outletPressure =
@@ -48,15 +35,20 @@ export default class Pipe extends SolarThermalSystemComponent {
   }
 
   // This is an incredibly simplified model for how the temperature gradient behaves and assumes both constant density of fluid and heat capacity.
-  public outletTemperatureCalculation() {
-    const { innerSurfaceTemperature: Ts } = this.pipeProps
-    const { length: L } = this.pipeProps
-    const alpha = this.alphaCalculation()
-    const ouletTemperature =
-      Ts +
-      (this.boundaryConditions.initialTemperature - Ts) *
-        Math.exp(-1 * alpha * L)
-    return ouletTemperature
+  public outletTemperatureCalculation(): number {
+    const {
+      length: L,
+      heatTransferCoefficient: h,
+      innerSurfaceTemperature: Tp,
+      diameter: D,
+    } = this.pipeProps
+    const { density, heatCapacity: Cp } = this.fluid.data
+    const area = (Math.PI * D ** 2) / 4
+    const avgVelocity = this.fluid.volumetricFlowRate / area
+    const delTemp =
+      (2 * L * h * (Tp - this.boundaryConditions.initialTemperature)) /
+      ((density * Cp * avgVelocity * D) / 2)
+    return delTemp + this.boundaryConditions.initialTemperature
   }
 
   public outletEnthalpyCalculation(): number {
