@@ -1,13 +1,13 @@
 import ComponentFactory from '../components/ComponentFactory'
 import { Liquid } from '../components/Fluid'
-import SolarPanel from '../components/SolarPanel'
+import Pump from '../components/Pump'
 import thermodynamicFluidsProperties from '../constants/fluidProps'
 import VanDerWaalsEOS from '../EquationOfState'
 import { FluidType } from '../types/FluidType'
 import { UserInput } from '../types/Server'
 
 describe('SolarPanel Test Suite', () => {
-  let solarPanel: SolarPanel
+  let pump: Pump
   let input: UserInput
   beforeEach(() => {
     const fluidData = thermodynamicFluidsProperties[FluidType.Water]
@@ -16,37 +16,34 @@ describe('SolarPanel Test Suite', () => {
     input = {
       components: [
         {
-          component: 'SolarPanel',
+          component: 'Pump',
           data: {
-            powerGen: 1000, // W/m^2
-            solarSize: 2, // m^2
+            pressureHead: 2, // bar
           },
         },
       ],
       fluid: new Liquid(fluidData, eos, 0.063), // fluid contains information about the fluid and its thermodynamics.
       boundaryConditions: {
-        initialPressure: 1, // bar
+        initialPressure: 5, // bar
         initialTemperature: 30 + 273.15, // K
       },
     }
 
-    solarPanel = ComponentFactory.createComponent(
+    pump = ComponentFactory.createComponent(
       input.components[0].component,
       input.fluid,
       input.components[0].data,
       input.boundaryConditions
-    ) as SolarPanel
+    ) as Pump
   })
 
-  test('outletTemperatureCalculation result is greater than the initial temperature provided.', () => {
-    expect(solarPanel.outletTemperatureCalculation()).toBeGreaterThan(
+  test('outletPressureCalculation result is pressure head plus initial pressure.', () => {
+    expect(pump.outletPressureCalculation()).toEqual(7)
+  })
+
+  test('outletTemperature returns the initial temperature since there is no temperature change.', () => {
+    expect(pump.outletTemperatureCalculation()).toEqual(
       input.boundaryConditions.initialTemperature
-    )
-  })
-
-  test('outputPressureCalculation returns the initial pressure since there is no pressure change.', () => {
-    expect(solarPanel.outletPressureCalculation()).toEqual(
-      input.boundaryConditions.initialPressure
     )
   })
 })
