@@ -1,5 +1,6 @@
 export enum FluidType {
   Water,
+  CarbonDioxide,
 }
 
 export interface FluidProperties {

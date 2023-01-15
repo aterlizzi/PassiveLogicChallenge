@@ -20,6 +20,7 @@ export default abstract class Fluid {
   }
 
   abstract getVolume(temperature: number, pressure: number): number
+  abstract getDensity(temperature: number, pressure: number): number
 
   public entropyCalculation(temperature: number, pressure: number) {
     const volume = this.getVolume(temperature, pressure)
@@ -47,6 +48,10 @@ export class Gas extends Fluid {
       this.data.criticalPressure
     )
   }
+
+  getDensity(temperature: number, pressure: number): number {
+    return (pressure * this.data.molarMass) / (0.08314 * temperature)
+  }
 }
 
 export class Liquid extends Fluid {
@@ -68,5 +73,9 @@ export class Liquid extends Fluid {
       this.data.criticalPressure
     )
     return this.volume
+  }
+
+  getDensity(): number {
+    return this.data.density
   }
 }

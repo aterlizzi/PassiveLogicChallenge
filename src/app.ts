@@ -25,7 +25,7 @@ const input: UserInput = {
         fanningFrictionFactor: 0.02,
         diameter: 0.1, // meters
         length: 5, // meters
-        thermalConductivity: 45, // W/(mK)
+        thermalConductivity: 0.01663, // W/(mK)
         specificHeat: 0.472, // J/g-°C
         innerSurfaceTemperature: 30 + 273.15, // K
         heatTransferCoefficient: 11.3, // People spend their entire lives trying to find the heatTransferCoefficient. So, needless to say this is an approximation.

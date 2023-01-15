@@ -22,7 +22,11 @@ export default class Pipe extends SolarThermalSystemComponent {
     const { fanningFrictionFactor: f, diameter: D, length: L } = this.pipeProps
     const avgVelocity =
       this.fluid.volumetricFlowRate / 1000 / ((Math.PI * D ** 2) / 4)
-    const { density } = this.fluid.data
+    const density = this.fluid.getDensity(
+      this.boundaryConditions.initialTemperature,
+      this.boundaryConditions.initialPressure
+    )
+    console.log(density)
     const delPressure = 2 * density * avgVelocity ** 2 * (L / D) * f
     return delPressure
   }
@@ -42,7 +46,11 @@ export default class Pipe extends SolarThermalSystemComponent {
       innerSurfaceTemperature: Tp,
       diameter: D,
     } = this.pipeProps
-    const { density, heatCapacity: Cp } = this.fluid.data
+    const { heatCapacity: Cp } = this.fluid.data
+    const density = this.fluid.getDensity(
+      this.boundaryConditions.initialTemperature,
+      this.outletPressureCalculation()
+    )
     const area = (Math.PI * D ** 2) / 4
     const avgVelocity = this.fluid.volumetricFlowRate / area
     const delTemp =
