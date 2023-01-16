@@ -50,12 +50,6 @@ const input: UserInput = {
       },
     },
     {
-      component: 'StorageTank',
-      data: {
-        desiredOutletTemperature: 30 + 273.15, // K
-      },
-    },
-    {
       component: 'Pipe',
       data: {
         fanningFrictionFactor: 0.02,
