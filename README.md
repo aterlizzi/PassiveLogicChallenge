@@ -19,3 +19,43 @@ Some equations of states are more equipped for different working fluids. To supp
 ## Future Implementations
 
 In the future, this could be changed to support a frontend that allows the user to create there own cycles from various components (Solar Panel, etc.). By simplying implementing different components, some user input validation, and new equation of states and working fluid types, you could make something of value.
+
+## Result
+
+The result from the default input is as follows:
+
+------------ SolarPanel -----------
+{
+outputPressure: '1 bar',
+outputTemperature: '310.7489929829241 K',
+outputEnthalpy: '2.285621643288428 kJ/mol',
+outputEntropy: '0.01209789065511929 kJ/mol-K'
+}
+------------ Pipe -----------
+{
+outputPressure: '0.9999987160096088 bar',
+outputTemperature: '310.23650886404454 K',
+outputEnthalpy: '2.283892034859621 kJ/mol',
+outputEntropy: '0.012093694066134048 kJ/mol-K'
+}
+------------ Pump -----------
+{
+outputPressure: '2.9999987160096087 bar',
+outputTemperature: '310.23650886404454 K',
+outputEnthalpy: '2.283892034859621 kJ/mol',
+outputEntropy: '0.012093694066134048 kJ/mol-K'
+}
+------------ Pipe -----------
+{
+outputPressure: '2.999997945615374 bar',
+outputTemperature: '309.9497558751196 K',
+outputEnthalpy: '2.282924342673093 kJ/mol',
+outputEntropy: '0.012091343174238054 kJ/mol-K'
+}
+------------ Pipe -----------
+{
+outputPressure: '2.9999958912307476 bar',
+outputTemperature: '309.21602351745855 K',
+outputEnthalpy: '2.280448526764741 kJ/mol',
+outputEntropy: '0.012085318782376812 kJ/mol-K'
+}
