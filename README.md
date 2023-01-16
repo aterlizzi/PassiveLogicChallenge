@@ -24,6 +24,7 @@ In the future, this could be changed to support a frontend that allows the user 
 
 The result from the default input is as follows:
 
+```
 ------------ SolarPanel -----------
 {
 outputPressure: '1 bar',
@@ -59,3 +60,4 @@ outputTemperature: '309.21602351745855 K',
 outputEnthalpy: '2.280448526764741 kJ/mol',
 outputEntropy: '0.012085318782376812 kJ/mol-K'
 }
+```
