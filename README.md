@@ -15,3 +15,7 @@ A object-orientated approach was used for simulation. Components, or the solar p
 To support various types of working fluids-Liquids, Vapors, and possibly Mixtures, a base Fluid class is created. From there, various phases inherit from this base class with modified methods depending on the phase.
 
 Some equations of states are more equipped for different working fluids. To support the use of various models, a base EquationOfState class can be inherited from to quickly create new models for thermodynamic approximations.
+
+## Future Implementations
+
+In the future, this could be changed to support a frontend that allows the user to create there own cycles from various components (Solar Panel, etc.). By simplying implementing different components, some user input validation, and new equation of states and working fluid types, you could make something of value.
